@@ -115,17 +115,20 @@ st.markdown("""
     right: 0px;
     z-index: 1000;
     width: 150px;
-    height: 55px;
+    height: 55px; /* Same height as top-logo */
 }
+
 /* Style for the top logo */
 .top-logo {
     position: fixed;
     top: 0px;
-    right: 150px;
+    left: 0px; /* Start from the left edge */
+    right: 150px; /* Extend until the start of dilytics-logo */
     z-index: 1000;
-    width: auto;
-    height: 55px;
-    transition: right 0.3s ease;
+    width: auto; /* Width auto to fill the space between left: 0 and right: 150px */
+    height: 55px; /* Same height as dilytics-logo */
+    transition: right 0.3s ease; /* Retained transition */
+}
 }
 /* Theme-specific styling */
 body {

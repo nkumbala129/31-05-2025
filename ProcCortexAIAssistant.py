@@ -125,7 +125,7 @@ st.markdown("""
     z-index: 999; /* Slightly below logo to ensure logo remains visible */
     background-color: #ffffff; /* White background */
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    #border-bottom: 1px solid #ddd;
     text-align: center;
 }
 /* Add padding to main content to avoid overlap with fixed header */

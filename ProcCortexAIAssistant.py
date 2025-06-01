@@ -112,7 +112,7 @@ st.markdown("""
 .dilytics-logo {
     position: fixed;
     top: 0px;
-    right: 10px;
+    right: 0px;
     z-index: 1000;
     width: 150px;
     height: auto;
@@ -121,7 +121,7 @@ st.markdown("""
 .top-logo {
     position: fixed;
     top: 0px;
-    left: 390px;
+    right: 150px;
     z-index: 1000;
     width: 900px;
     height: auto;

@@ -120,7 +120,7 @@ st.markdown("""
 .top-logo {
     position: fixed;
     top: 10px; /* Position below Dilytics logo to avoid overlap */
-    left: 350px;
+    left: 400px;
     z-index: 1000; /* Same z-index to stay above other elements */
     width: 550px; /* Adjust size as needed */
     height: auto;

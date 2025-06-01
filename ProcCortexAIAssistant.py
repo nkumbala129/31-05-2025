@@ -123,7 +123,7 @@ st.markdown("""
     top: 0px;
     left: 390px;
     z-index: 1000;
-    width: 600px;
+    width: 1000px;
     height: auto;
 }
 /* Theme-specific styling */

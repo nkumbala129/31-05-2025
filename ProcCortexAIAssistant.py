@@ -121,6 +121,7 @@ st.markdown("""
 .top-logo {
     position: fixed;
     top: 0px;
+    right: 150px;
     z-index: 1000;
     width: 900px;
     height: 55px;

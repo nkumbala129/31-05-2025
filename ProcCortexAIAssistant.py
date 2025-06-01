@@ -110,7 +110,7 @@ st.markdown("""
 /* Style for the Dilytics logo */
 .dilytics-logo {
     position: fixed;
-    top: 10px;
+    top: 8px;
     right: 10px;
     z-index: 1000; /* Ensure logo stays above other elements */
     width: 150px; /* Adjust size as needed */
@@ -119,7 +119,7 @@ st.markdown("""
 /* Style for the top logo */
 .top-logo {
     position: fixed;
-    top: 10px; /* Position below Dilytics logo to avoid overlap */
+    top: 8px; /* Position below Dilytics logo to avoid overlap */
     left: 400px;
     z-index: 1000; /* Same z-index to stay above other elements */
     width: 550px; /* Adjust size as needed */

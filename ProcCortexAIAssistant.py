@@ -85,7 +85,7 @@ if "rerun_trigger" not in st.session_state:
 
 # --- CSS Styling ---
 # Apply custom CSS to hide Streamlit branding, prevent chat message shading, disable copy buttons,
-# and position the Dilytics logo in the top-right corner of the chat section.
+# and position both Dilytics_logo.png and top logo.PNG in the top-right corner of the chat section.
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -107,7 +107,7 @@ st.markdown("""
 .copy-button, [data-testid="copy-button"], [title="Copy to clipboard"], [data-testid="stTextArea"] {
     display: none !important;
 }
-/* Style for the Dilytics logo in the top-right corner of the chat section */
+/* Style for the Dilytics logo */
 .dilytics-logo {
     position: fixed;
     top: 10px;
@@ -116,15 +116,27 @@ st.markdown("""
     width: 150px; /* Adjust size as needed */
     height: auto;
 }
+/* Style for the top logo */
+.top-logo {
+    position: fixed;
+    top: 70px; /* Position below Dilytics logo to avoid overlap */
+    right: 10px;
+    z-index: 1000; /* Same z-index to stay above other elements */
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# --- Add Logo in the Main UI ---
-# Place the logo at the start of the main UI section to ensure it appears in the chat area
+# --- Main UI and Query Processing ---
+# Set up main interface with title, semantic model display, and chat input.
 if st.session_state.authenticated:
-    # Place the logo image using markdown with the custom class
+    # Add both logos (Dilytics_logo.png and top logo.PNG)
     st.markdown(
-        f'<img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">',
+        f'''
+        <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">
+        <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/top%20logo.PNG" class="top-logo">
+        ''',
         unsafe_allow_html=True
     )
 

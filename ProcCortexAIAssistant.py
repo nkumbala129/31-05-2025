@@ -115,7 +115,7 @@ st.markdown("""
     right: 0px;
     z-index: 1000;
     width: 150px;
-    height: auto;
+    height: 100px;
 }
 /* Style for the top logo */
 .top-logo {
@@ -124,7 +124,7 @@ st.markdown("""
     right: 150px;
     z-index: 1000;
     width: 900px;
-    height: auto;
+    height: 100px;
 }
 /* Theme-specific styling */
 body {

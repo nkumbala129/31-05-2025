@@ -86,7 +86,7 @@ if "theme" not in st.session_state:
     st.session_state.theme = "light"  # Default theme
 
 # --- CSS Styling ---
-# Apply custom CSS for themes and existing styling with dynamic positioning for top logo
+# Apply custom CSS for themes and existing styling
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -115,49 +115,22 @@ st.markdown("""
     right: 0px;
     z-index: 1000;
     width: 150px;
-    height: 55px; /* Same height as top-logo */
+    height: 55px;
 }
-
 /* Style for the top logo */
 .top-logo {
     position: fixed;
     top: 0px;
-    left: 0px; /* Start from the left edge */
-    right: 150px; /* Extend until the start of dilytics-logo */
+    right: 150px;
     z-index: 1000;
-    width: auto; /* Width auto to fill the space between left: 0 and right: 150px */
-    height: 55px; /* Same height as dilytics-logo */
-    transition: right 0.3s ease; /* Retained transition */
-}
+    width: 900px;
+    height: 55px;
 }
 /* Theme-specific styling */
 body {
     transition: background-color 0.3s, color 0.3s;
 }
 </style>
-<script>
-// Function to adjust top logo position based on sidebar width
-function adjustTopLogoPosition() {
-    const sidebar = document.querySelector('[data-testid="stSidebar"]');
-    const topLogo = document.querySelector('.top-logo');
-    
-    if (sidebar && topLogo) {
-        const sidebarWidth = sidebar.offsetWidth;
-        // Adjust top logo position: sidebar width + 150px (to account for Dilytics logo width)
-        topLogo.style.right = `${sidebarWidth + 150}px`;
-    }
-}
-// Run on page load
-document.addEventListener('DOMContentLoaded', adjustTopLogoPosition);
-// Run when sidebar is toggled (Streamlit triggers resize events)
-window.addEventListener('resize', adjustTopLogoPosition);
-// Observe changes to sidebar for dynamic updates
-const sidebar = document.querySelector('[data-testid="stSidebar"]');
-if (sidebar) {
-    const observer = new MutationObserver(adjustTopLogoPosition);
-    observer.observe(sidebar, { attributes: true, childList: true, subtree: true });
-}
-</script>
 """, unsafe_allow_html=True)
 
 # Theme CSS injection based on session state

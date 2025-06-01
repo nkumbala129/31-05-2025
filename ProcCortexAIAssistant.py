@@ -85,7 +85,7 @@ if "rerun_trigger" not in st.session_state:
 
 # --- CSS Styling ---
 # Apply custom CSS to hide Streamlit branding, prevent chat message shading, disable copy buttons,
-# and position the Dilytics logo in the top-right corner of the chat section.
+# position the Dilytics logo, and style the fixed header.
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -107,14 +107,30 @@ st.markdown("""
 .copy-button, [data-testid="copy-button"], [title="Copy to clipboard"], [data-testid="stTextArea"] {
     display: none !important;
 }
-/* Style for the Dilytics logo in the top-right corner of the chat section */
+/* Style for the Dilytics logo in the top-right corner */
 .dilytics-logo {
     position: fixed;
     top: 10px;
     right: 10px;
-    z-index: 1000; /* Ensure logo stays above other elements */
-    width: 150px; /* Adjust size as needed */
+    z-index: 1000;
+    width: 150px;
     height: auto;
+}
+/* Style for the fixed header container */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 170px; /* Adjusted to avoid overlap with the logo (150px width + 10px right + 10px buffer) */
+    z-index: 999; /* Slightly below logo to avoid overlap */
+    background-color: #f0f2f6;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+/* Add padding to main content to avoid overlap with fixed header */
+.stApp {
+    padding-top: 100px; /* Adjust based on header height */
 }
 </style>
 """, unsafe_allow_html=True)
@@ -622,11 +638,11 @@ else:
             )
 
     # --- Main UI and Query Processing ---
-    # Set up main interface with static header, semantic model display, and chat input.
+    # Set up main interface with fixed header, semantic model display, and chat input.
     with st.container():
         st.markdown(
             """
-            <div style='text-align: center; padding: 10px; background-color: #f0f2f6; border-radius: 10px; margin-bottom: 20px;'>
+            <div class="fixed-header">
                 <h1 style='color: #29B5E8; margin-bottom: 5px;'>Cortex AI-Procurement Assistant by DiLytics</h1>
                 <p style='font-size: 16px; color: #333;'><strong>Welcome to Cortex AI. I am here to help with Dilytics Procurement Insights Solutions</strong></p>
             </div>
@@ -711,7 +727,12 @@ else:
                         greeting = "Hello"
                     response_content = f"{greeting}! I'm here to help with your procurement analytics questions. Here are some questions you can ask me:\n\n"
                     selected_questions = sample_questions[:5]
-                    forphants = selected_questions
+                    for i, q in enumerate(selected_questions, 1):
+                        response_content += f"{i}. {q}\n"
+                    response_content += "\nFeel free to ask any of these or come up with your own related to procurement analytics!"
+                    st.write_stream(stream_text(response_content))
+                    assistant_response["content"] = response_content
+                    st.session_state.last_suggestions = selected_questions
                     st.session_state.messages.append({"role": "assistant", "content": response_content})
 
                 elif is_complete:

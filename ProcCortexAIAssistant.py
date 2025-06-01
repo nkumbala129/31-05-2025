@@ -84,7 +84,8 @@ if "rerun_trigger" not in st.session_state:
     st.session_state.rerun_trigger = False
 
 # --- CSS Styling ---
-# Apply custom CSS to hide Streamlit branding, prevent chat message shading, and disable copy buttons.
+# Apply custom CSS to hide Streamlit branding, prevent chat message shading, disable copy buttons,
+# and position the Dilytics logo in the top-right corner of the chat section.
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -106,8 +107,26 @@ st.markdown("""
 .copy-button, [data-testid="copy-button"], [title="Copy to clipboard"], [data-testid="stTextArea"] {
     display: none !important;
 }
+/* Style for the Dilytics logo in the top-right corner of the chat section */
+.dilytics-logo {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000; /* Ensure logo stays above other elements */
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
 </style>
 """, unsafe_allow_html=True)
+
+# --- Add Logo in the Main UI ---
+# Place the logo at the start of the main UI section to ensure it appears in the chat area
+if st.session_state.authenticated:
+    # Place the logo image using markdown with the custom class
+    st.markdown(
+        f'<img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">',
+        unsafe_allow_html=True
+    )
 
 # --- Stream Text Function ---
 # Stream text output in chunks with a delay for a typewriter effect.

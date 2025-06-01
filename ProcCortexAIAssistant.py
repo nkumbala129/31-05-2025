@@ -123,7 +123,7 @@ st.markdown("""
     left: 0;
     right: 170px; /* Adjusted to avoid overlap with the logo (150px width + 10px right + 10px buffer) */
     z-index: 999; /* Slightly below logo to avoid overlap */
-    background-color: #f0f2f6;
+    background-color: #ffffff;
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: center;

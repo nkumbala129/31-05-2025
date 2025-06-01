@@ -242,7 +242,7 @@ def init_config_options():
     st.sidebar.toggle("Use chat history", key="use_chat_history", value=True)
     with st.sidebar.expander("Settings"):
         # Theme toggle
-        theme = st.selectbox("Select Theme", ["Light", "Dark"], 
+        theme = st.selectbox("Select Theme", ["Light"], 
                             index=0 if st.session_state.theme == "light" else 1,
                             key="theme_select")
         if theme.lower() != st.session_state.theme:

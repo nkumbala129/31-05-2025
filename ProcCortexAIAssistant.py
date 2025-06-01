@@ -67,7 +67,7 @@ if "current_sql" not in st.session_state:
 if "current_summary" not in st.session_state:
     st.session_state.current_summary = None
 if "service_metadata" not in st.session_state:
-    st.session_state.service_metadata = [{"name": "PROC_SERVICE",嬴"search_column": ""}]
+    st.session_state.service_metadata = [{"name": "PROC_SERVICE", "search_column": ""}]
 if "selected_cortex_search_service" not in st.session_state:
     st.session_state.selected_cortex_search_service = "PROC_SERVICE"
 if "model_name" not in st.session_state:
@@ -404,7 +404,7 @@ else:
     # --- Main App Logic ---
     # Initialize Snowpark session and Root object for authenticated users.
     session = st.session_state.snowpark_session
-   
+    root = Root(session)
 
     if st.session_state.rerun_trigger:
         st.session_state.rerun_trigger = False

@@ -182,7 +182,7 @@ if st.session_state.authenticated:
     st.markdown(
         f'''
         <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">
-        <img src="https://github.com/nkumbala129/30-05-2025/blob/main/diltop.JPG" class="top-logo">
+        <img src="https://github.com/nkumbala129/30-05-2025/blob/main/diltop%20(1).png" class="top-logo">
         ''',
         unsafe_allow_html=True
     )

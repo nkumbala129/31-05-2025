@@ -137,7 +137,19 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+# --- Main UI and Query Processing ---
+# Create a container for the fixed-position title and text
+with st.container():
+    st.markdown(
+        '<div class="fixed-top-left">'
+        '<h1 style="font-size: 24px; margin: 0;">Cortex AI-Procurement Assistant by DiLytics</h1>'
+        '<p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0;">Welcome to Cortex AI. I am here to help with Dilytics Procurement Insights Solutions</p>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
+semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
+init_service_metadata()
 # --- Main UI and Query Processing ---
 # Set up main interface with title, semantic model display, and chat input.
 if st.session_state.authenticated:

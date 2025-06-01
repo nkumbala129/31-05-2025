@@ -114,7 +114,7 @@ st.markdown("""
     top: 0px;
     right: 10px;
     z-index: 1000;
-    width: 600px;
+    width: 150px;
     height: auto;
 }
 /* Style for the top logo */

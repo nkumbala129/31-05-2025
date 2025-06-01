@@ -67,7 +67,7 @@ if "current_sql" not in st.session_state:
 if "current_summary" not in st.session_state:
     st.session_state.current_summary = None
 if "service_metadata" not in st.session_state:
-    st.session_state.service_metadata = [{"name": "PROC_SERVICE", "search_column": ""}]
+    st.session_state.service_metadata = [{"name": "PROC_SERVICE",嬴"search_column": ""}]
 if "selected_cortex_search_service" not in st.session_state:
     st.session_state.selected_cortex_search_service = "PROC_SERVICE"
 if "model_name" not in st.session_state:
@@ -82,10 +82,11 @@ if "clear_conversation" not in st.session_state:
     st.session_state.clear_conversation = False
 if "rerun_trigger" not in st.session_state:
     st.session_state.rerun_trigger = False
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"  # Default theme
 
 # --- CSS Styling ---
-# Apply custom CSS to hide Streamlit branding, prevent chat message shading, disable copy buttons,
-# and position both Dilytics_logo.png and top logo.PNG in the top-right corner of the chat section.
+# Apply custom CSS for themes and existing styling
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -112,25 +113,71 @@ st.markdown("""
     position: fixed;
     top: 5px;
     right: 10px;
-    z-index: 1000; /* Ensure logo stays above other elements */
-    width: 150px; /* Adjust size as needed */
+    z-index: 1000;
+    width: 150px;
     height: auto;
 }
 /* Style for the top logo */
 .top-logo {
     position: fixed;
-    top: 5px; /* Position below Dilytics logo to avoid overlap */
+    top: 5px;
     left: 450px;
-    z-index: 1000; /* Same z-index to stay above other elements */
-    width: 550px; /* Adjust size as needed */
+    z-index: 1000;
+    width: 550px;
     height: auto;
+}
+/* Theme-specific styling */
+body {
+    transition: background-color 0.3s, color 0.3s;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# Theme CSS injection based on session state
+def apply_theme():
+    if st.session_state.theme == "dark":
+        st.markdown("""
+        <style>
+        body, .stApp {
+            background-color: #1E1E1E !important;
+            color: #FFFFFF !important;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #2A2A2A !important;
+        }
+        [data-testid="stChatMessage"] {
+            background-color: #2A2A2A !important;
+        }
+        [data-testid="stTextInput"], [data-testid="stSelectbox"] {
+            background-color: #333333 !important;
+            color: #FFFFFF !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <style>
+        body, .stApp {
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #F5F5F5 !important;
+        }
+        [data-testid="stChatMessage"] {
+            background-color: #FFFFFF !important;
+        }
+        [data-testid="stTextInput"], [data-testid="stSelectbox"] {
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
 # --- Main UI and Query Processing ---
 # Set up main interface with title, semantic model display, and chat input.
 if st.session_state.authenticated:
+    apply_theme()  # Apply the selected theme
     # Add both logos (Dilytics_logo.png and top logo.PNG)
     st.markdown(
         f'''
@@ -163,6 +210,20 @@ def start_new_conversation():
     st.session_state.clear_conversation = False
     st.session_state.rerun_trigger = True
 
+# --- Logout Function ---
+def logout():
+    if st.session_state.CONN:
+        st.session_state.CONN.close()
+    st.session_state.authenticated = False
+    st.session_state.username = ""
+    st.session_state.password = ""
+    st.session_state.CONN = None
+    st.session_state.snowpark_session = None
+    st.session_state.chat_history = []
+    st.session_state.messages = []
+    st.session_state.rerun_trigger = True
+    st.rerun()
+
 # --- Initialize Service Metadata ---
 # Fetch and store metadata for the Cortex search service, including the search column.
 def init_service_metadata():
@@ -175,11 +236,18 @@ def init_service_metadata():
         st.error(f"❌ Failed to verify PROC_SERVICE: {str(e)}. Using default configuration.")
 
 # --- Initialize Config Options ---
-# Set up sidebar controls for clearing conversations and configuring model and context settings.
+# Set up sidebar controls for clearing conversations, configuring model, context settings, theme, and logout.
 def init_config_options():
     st.sidebar.button("Clear conversation", on_click=start_new_conversation)
     st.sidebar.toggle("Use chat history", key="use_chat_history", value=True)
-    with st.sidebar.expander("Advanced options"):
+    with st.sidebar.expander("Settings"):
+        # Theme toggle
+        theme = st.selectbox("Select Theme", ["Light", "Dark"], 
+                            index=0 if st.session_state.theme == "light" else 1,
+                            key="theme_select")
+        if theme.lower() != st.session_state.theme:
+            st.session_state.theme = theme.lower()
+            st.rerun()
         st.selectbox("Select model:", MODELS, key="model_name")
         st.number_input(
             "Select number of context chunks",
@@ -195,6 +263,9 @@ def init_config_options():
             min_value=1,
             max_value=100
         )
+        # Logout button
+        if st.button("Logout"):
+            logout()
 
 # --- Query Cortex Search Service ---
 # Query the Cortex search service to retrieve relevant procurement data context for a given query.
@@ -333,7 +404,7 @@ else:
     # --- Main App Logic ---
     # Initialize Snowpark session and Root object for authenticated users.
     session = st.session_state.snowpark_session
-    root = Root(session)
+   
 
     if st.session_state.rerun_trigger:
         st.session_state.rerun_trigger = False

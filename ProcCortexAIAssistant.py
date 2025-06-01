@@ -86,47 +86,65 @@ if "rerun_trigger" not in st.session_state:
 # --- CSS Styling ---
 # Apply custom CSS to hide Streamlit branding, prevent chat message shading, disable copy buttons,
 # and position both Dilytics_logo.png and top logo.PNG in the top-right corner of the chat section.
-st.markdown("""
-<style>
-#MainMenu, header, footer {visibility: hidden;}
-[data-testid="stChatMessage"] {
-    opacity: 1 !important;
-    background-color: transparent !important;
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
-    overflow: hidden !important;
-}
-[data-testid="stChatMessageContent"] {
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
-    overflow: hidden !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
-.copy-button, [data-testid="copy-button"], [title="Copy to clipboard"], [data-testid="stTextArea"] {
-    display: none !important;
-}
-/* Style for the Dilytics logo */
-.dilytics-logo {
-    position: fixed;
-    top: 5px;
-    right: 10px;
-    z-index: 1000; /* Ensure logo stays above other elements */
-    width: 150px; /* Adjust size as needed */
-    height: auto;
-}
-/* Style for the top logo */
-.top-logo {
-    position: fixed;
-    top: 5px; /* Position below Dilytics logo to avoid overlap */
-    left: 450px;
-    z-index: 1000; /* Same z-index to stay above other elements */
-    width: 550px; /* Adjust size as needed */
-    height: auto;
-}
-</style>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <style>
+    #MainMenu, header, footer {visibility: hidden;}
+    [data-testid="stChatMessage"] {
+        opacity: 1 !important;
+        background-color: transparent !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        overflow: hidden !important;
+    }
+    [data-testid="stChatMessageContent"] {
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .copy-button, [data-testid="copy-button"], [title="Copy to clipboard"], [data-testid="stTextArea"] {
+        display: none !important;
+    }
+    /* Style for the Dilytics logo */
+    .dilytics-logo {
+        position: fixed;
+        top: 5px;
+        right: 10px;
+        z-index: 1000; /* Ensure logo stays above other elements */
+        width: 150px; /* Adjust size as needed */
+        height: auto;
+    }
+    /* Style for the top logo */
+    .top-logo {
+        position: fixed;
+        top: 5px; /* Position below Dilytics logo to avoid overlap */
+        left: 450px;
+        z-index: 1000; /* Same z-index to stay above other elements */
+        width: 550px; /* Adjust size as needed */
+        height: auto;
+    }
+    /* Style for the fixed top-left container */
+    .fixed-top-left {
+        position: fixed;
+        top: 5px;
+        left: 10px;
+        z-index: 1000; /* Match z-index of logos */
+        background-color: white; /* Ensure readability */
+        padding: 10px;
+        width: 300px; /* Adjust width as needed */
+        box-sizing: border-box;
+    }
+    /* Prevent overlap with main content */
+    .stApp {
+        padding-top: 100px; /* Adjust based on the height of fixed elements */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- Main UI and Query Processing ---
 # Set up main interface with title, semantic model display, and chat input.
@@ -635,8 +653,22 @@ else:
     # --- Main UI and Query Processing ---
     # Set up main interface with title, semantic model display, and chat input.
     #st.title("Cortex AI-Procurement Assistant by DiLytics")
-    semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
+   # semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
     #st.write(f"***Welcome to Cortex AI.I am here to help with Dilytics Procurement Insights Solutions***")
+   # init_service_metadata()
+
+        # --- Main UI and Query Processing ---
+    # Create a container for the fixed-position title and text
+    with st.container():
+        st.markdown(
+            '<div class="fixed-top-left">'
+            '<h1 style="font-size: 24px; margin: 0;">Cortex AI-Procurement Assistant by DiLytics</h1>'
+            '<p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0;">Welcome to Cortex AI. I am here to help with Dilytics Procurement Insights Solutions</p>'
+            '</div>',
+            unsafe_allow_html=True
+        )
+    
+    semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
     init_service_metadata()
 
     # Define sample questions for sidebar buttons.

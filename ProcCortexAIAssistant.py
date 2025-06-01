@@ -525,7 +525,8 @@ else:
                 "Which requisitions have been pending approval for more than a week?"
             ]
 
-# Function to display charts using Plotly
+    # --- Display Chart Function ---
+    # Function to display charts using Plotly
     def display_chart_tab(df: pd.DataFrame, prefix: str = "chart", query: str = ""):
         if df.empty or len(df.columns) < 2:
             return
@@ -621,10 +622,18 @@ else:
             )
 
     # --- Main UI and Query Processing ---
-    # Set up main interface with title, semantic model display, and chat input.
-    st.title("Cortex AI-Procurement Assistant by DiLytics")
+    # Set up main interface with static header, semantic model display, and chat input.
+    with st.container():
+        st.markdown(
+            """
+            <div style='text-align: center; padding: 10px; background-color: #f0f2f6; border-radius: 10px; margin-bottom: 20px;'>
+                <h1 style='color: #29B5E8; margin-bottom: 5px;'>Cortex AI-Procurement Assistant by DiLytics</h1>
+                <p style='font-size: 16px; color: #333;'><strong>Welcome to Cortex AI. I am here to help with Dilytics Procurement Insights Solutions</strong></p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
-    st.write(f"***Welcome to Cortex AI.I am here to help with Dilytics Procurement Insights Solutions***")
     init_service_metadata()
 
     # Define sample questions for sidebar buttons.
@@ -702,12 +711,7 @@ else:
                         greeting = "Hello"
                     response_content = f"{greeting}! I'm here to help with your procurement analytics questions. Here are some questions you can ask me:\n\n"
                     selected_questions = sample_questions[:5]
-                    for i, q in enumerate(selected_questions, 1):
-                        response_content += f"{i}. {q}\n"
-                    response_content += "\nFeel free to ask any of these or come up with your own related to procurement analytics!"
-                    st.write_stream(stream_text(response_content))
-                    assistant_response["content"] = response_content
-                    st.session_state.last_suggestions = selected_questions
+                    forphants = selected_questions
                     st.session_state.messages.append({"role": "assistant", "content": response_content})
 
                 elif is_complete:

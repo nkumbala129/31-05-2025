@@ -86,7 +86,7 @@ if "theme" not in st.session_state:
     st.session_state.theme = "light"  # Default theme
 
 # --- CSS Styling ---
-# Apply custom CSS for themes and existing styling
+# Apply custom CSS for themes and existing styling with dynamic image positioning
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -112,25 +112,50 @@ st.markdown("""
 .dilytics-logo {
     position: fixed;
     top: 0px;
-    right: 0px;
     z-index: 1000;
     width: 150px;
     height: 55px;
+    transition: right 0.3s ease;
 }
 /* Style for the top logo */
 .top-logo {
     position: fixed;
     top: 0px;
-    right: 150px;
     z-index: 1000;
     width: 900px;
     height: 55px;
+    transition: right 0.3s ease;
 }
 /* Theme-specific styling */
 body {
     transition: background-color 0.3s, color 0.3s;
 }
 </style>
+<script>
+// Function to adjust logo positions based on sidebar width
+function adjustLogoPositions() {
+    const sidebar = document.querySelector('[data-testid="stSidebar"]');
+    const dilyticsLogo = document.querySelector('.dilytics-logo');
+    const topLogo = document.querySelector('.top-logo');
+    
+    if (sidebar && dilyticsLogo && topLogo) {
+        const sidebarWidth = sidebar.offsetWidth;
+        // Adjust positions: add sidebar width to avoid overlap
+        dilyticsLogo.style.right = `${sidebarWidth}px`;
+        topLogo.style.right = `${sidebarWidth + 150}px`; // 150px offset for top logo relative to Dilytics logo
+    }
+}
+// Run on page load
+document.addEventListener('DOMContentLoaded', adjustLogoPositions);
+// Run when sidebar is toggled (Streamlit triggers resize events)
+window.addEventListener('resize', adjustLogoPositions);
+// Observe changes to sidebar for dynamic updates
+const sidebar = document.querySelector('[data-testid="stSidebar"]');
+if (sidebar) {
+    const observer = new MutationObserver(adjustLogoPositions);
+    observer.observe(sidebar, { attributes: true, childList: true, subtree: true });
+}
+</script>
 """, unsafe_allow_html=True)
 
 # Theme CSS injection based on session state

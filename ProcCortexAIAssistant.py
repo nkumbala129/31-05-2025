@@ -123,7 +123,7 @@ st.markdown("""
     top: 0px;
     right: 150px;
     z-index: 1000;
-    width: 900px;
+    width: auto;
     height: 55px;
     transition: right 0.3s ease;
 }

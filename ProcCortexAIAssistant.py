@@ -603,7 +603,7 @@ else:
 
     # --- Main UI and Query Processing ---
     # Set up main interface with title, semantic model display, and chat input.
-    st.title("Cortex AI Assistant by DiLytics")
+    st.title("Cortex AI-Procurement Assistant by DiLytics")
     semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
     st.write(f"***Welcome to Cortex AI.I am here to help with Dilytics Procurement Insights Solutions***")
     init_service_metadata()

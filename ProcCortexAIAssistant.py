@@ -82,11 +82,10 @@ if "clear_conversation" not in st.session_state:
     st.session_state.clear_conversation = False
 if "rerun_trigger" not in st.session_state:
     st.session_state.rerun_trigger = False
-if "theme" not in st.session_state:
-    st.session_state.theme = "light"  # Default theme
 
 # --- CSS Styling ---
-# Apply custom CSS for themes and existing styling
+# Apply custom CSS to hide Streamlit branding, prevent chat message shading, disable copy buttons,
+# and position the Dilytics logo in the top-right corner of the chat section.
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -108,82 +107,24 @@ st.markdown("""
 .copy-button, [data-testid="copy-button"], [title="Copy to clipboard"], [data-testid="stTextArea"] {
     display: none !important;
 }
-/* Style for the Dilytics logo */
+/* Style for the Dilytics logo in the top-right corner of the chat section */
 .dilytics-logo {
     position: fixed;
-    top: 0px;
-    right: 0px;
-    z-index: 1000;
-    width: 150px;
-    height: 55px;
-}
-/* Style for the top logo */
-.top-logo {
-    position: fixed;
-    top: 0px;
-    right: 150px;
-    z-index: 1000;
-    width: 900px;
-    height: 55px;
-}
-/* Theme-specific styling */
-body {
-    transition: background-color 0.3s, color 0.3s;
+    top: 10px;
+    right: 10px;
+    z-index: 1000; /* Ensure logo stays above other elements */
+    width: 150px; /* Adjust size as needed */
+    height: auto;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Theme CSS injection based on session state
-def apply_theme():
-    if st.session_state.theme == "dark":
-        st.markdown("""
-        <style>
-        body, .stApp {
-            background-color: #1E1E1E !important;
-            color: #FFFFFF !important;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #2A2A2A !important;
-        }
-        [data-testid="stChatMessage"] {
-            background-color: #2A2A2A !important;
-        }
-        [data-testid="stTextInput"], [data-testid="stSelectbox"] {
-            background-color: #333333 !important;
-            color: #FFFFFF !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
-        <style>
-        body, .stApp {
-            background-color: #FFFFFF !important;
-            color: #000000 !important;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #F5F5F5 !important;
-        }
-        [data-testid="stChatMessage"] {
-            background-color: #FFFFFF !important;
-        }
-        [data-testid="stTextInput"], [data-testid="stSelectbox"] {
-            background-color: #FFFFFF !important;
-            color: #000000 !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
-# --- Main UI and Query Processing ---
-# Set up main interface with title, semantic model display, and chat input.
+# --- Add Logo in the Main UI ---
+# Place the logo at the start of the main UI section to ensure it appears in the chat area
 if st.session_state.authenticated:
-    apply_theme()  # Apply the selected theme
-    # Add both logos (Dilytics_logo.png and top logo.PNG)
+    # Place the logo image using markdown with the custom class
     st.markdown(
-        f'''
-        <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">
-        <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/top%20logo.png" class="top-logo">
-        ''',
+        f'<img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">',
         unsafe_allow_html=True
     )
 
@@ -210,20 +151,6 @@ def start_new_conversation():
     st.session_state.clear_conversation = False
     st.session_state.rerun_trigger = True
 
-# --- Logout Function ---
-def logout():
-    if st.session_state.CONN:
-        st.session_state.CONN.close()
-    st.session_state.authenticated = False
-    st.session_state.username = ""
-    st.session_state.password = ""
-    st.session_state.CONN = None
-    st.session_state.snowpark_session = None
-    st.session_state.chat_history = []
-    st.session_state.messages = []
-    st.session_state.rerun_trigger = True
-    st.rerun()
-
 # --- Initialize Service Metadata ---
 # Fetch and store metadata for the Cortex search service, including the search column.
 def init_service_metadata():
@@ -236,18 +163,11 @@ def init_service_metadata():
         st.error(f"❌ Failed to verify PROC_SERVICE: {str(e)}. Using default configuration.")
 
 # --- Initialize Config Options ---
-# Set up sidebar controls for clearing conversations, configuring model, context settings, theme, and logout.
+# Set up sidebar controls for clearing conversations and configuring model and context settings.
 def init_config_options():
     st.sidebar.button("Clear conversation", on_click=start_new_conversation)
     st.sidebar.toggle("Use chat history", key="use_chat_history", value=True)
-    with st.sidebar.expander("Settings"):
-        # Theme toggle
-        theme = st.selectbox("Select Theme", ["Light"], 
-                            index=0 if st.session_state.theme == "light" else 1,
-                            key="theme_select")
-        if theme.lower() != st.session_state.theme:
-            st.session_state.theme = theme.lower()
-            st.rerun()
+    with st.sidebar.expander("Advanced options"):
         st.selectbox("Select model:", MODELS, key="model_name")
         st.number_input(
             "Select number of context chunks",
@@ -263,9 +183,6 @@ def init_config_options():
             min_value=1,
             max_value=100
         )
-        # Logout button
-        if st.button("Logout"):
-            logout()
 
 # --- Query Cortex Search Service ---
 # Query the Cortex search service to retrieve relevant procurement data context for a given query.
@@ -705,9 +622,9 @@ else:
 
     # --- Main UI and Query Processing ---
     # Set up main interface with title, semantic model display, and chat input.
-    #st.title("Cortex AI-Procurement Assistant by DiLytics")
+    st.title("Cortex AI-Procurement Assistant by DiLytics")
     semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
-    #st.write(f"***Welcome to Cortex AI.I am here to help with Dilytics Procurement Insights Solutions***")
+    st.write(f"***Welcome to Cortex AI.I am here to help with Dilytics Procurement Insights Solutions***")
     init_service_metadata()
 
     # Define sample questions for sidebar buttons.

@@ -86,7 +86,7 @@ if "theme" not in st.session_state:
     st.session_state.theme = "light"  # Default theme
 
 # --- CSS Styling ---
-# Apply custom CSS for themes and existing styling with dynamic image positioning
+# Apply custom CSS for themes and existing styling with dynamic positioning for top logo
 st.markdown("""
 <style>
 #MainMenu, header, footer {visibility: hidden;}
@@ -112,10 +112,10 @@ st.markdown("""
 .dilytics-logo {
     position: fixed;
     top: 0px;
+    right: 0px;
     z-index: 1000;
     width: 150px;
     height: 55px;
-    transition: right 0.3s ease;
 }
 /* Style for the top logo */
 .top-logo {
@@ -132,27 +132,25 @@ body {
 }
 </style>
 <script>
-// Function to adjust logo positions based on sidebar width
-function adjustLogoPositions() {
+// Function to adjust top logo position based on sidebar width
+function adjustTopLogoPosition() {
     const sidebar = document.querySelector('[data-testid="stSidebar"]');
-    const dilyticsLogo = document.querySelector('.dilytics-logo');
     const topLogo = document.querySelector('.top-logo');
     
-    if (sidebar && dilyticsLogo && topLogo) {
+    if (sidebar && topLogo) {
         const sidebarWidth = sidebar.offsetWidth;
-        // Adjust positions: add sidebar width to avoid overlap
-        dilyticsLogo.style.right = `${sidebarWidth}px`;
-        topLogo.style.right = `${sidebarWidth + 150}px`; // 150px offset for top logo relative to Dilytics logo
+        // Adjust top logo position: sidebar width + 150px (to account for Dilytics logo width)
+        topLogo.style.right = `${sidebarWidth + 150}px`;
     }
 }
 // Run on page load
-document.addEventListener('DOMContentLoaded', adjustLogoPositions);
+document.addEventListener('DOMContentLoaded', adjustTopLogoPosition);
 // Run when sidebar is toggled (Streamlit triggers resize events)
-window.addEventListener('resize', adjustLogoPositions);
+window.addEventListener('resize', adjustTopLogoPosition);
 // Observe changes to sidebar for dynamic updates
 const sidebar = document.querySelector('[data-testid="stSidebar"]');
 if (sidebar) {
-    const observer = new MutationObserver(adjustLogoPositions);
+    const observer = new MutationObserver(adjustTopLogoPosition);
     observer.observe(sidebar, { attributes: true, childList: true, subtree: true });
 }
 </script>

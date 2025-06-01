@@ -117,15 +117,7 @@ st.markdown(
         width: 150px; /* Adjust size as needed */
         height: auto;
     }
-    /* Style for the top logo */
-    .top-logo {
-        position: fixed;
-        top: 5px; /* Position below Dilytics logo to avoid overlap */
-        left: 450px;
-        z-index: 1000; /* Same z-index to stay above other elements */
-        width: 550px; /* Adjust size as needed */
-        height: auto;
-    }
+   
     /* Style for the fixed top-left container */
     .fixed-top-left {
         position: fixed;
@@ -153,7 +145,6 @@ if st.session_state.authenticated:
     st.markdown(
         f'''
         <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/Dilytics_logo.png" class="dilytics-logo">
-        <img src="https://raw.githubusercontent.com/nkumbala129/30-05-2025/main/top%20logo.PNG" class="top-logo">
         ''',
         unsafe_allow_html=True
     )
